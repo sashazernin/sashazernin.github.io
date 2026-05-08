@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="yandex-verification" content="6a5318b4022b49f6" />
+    <title>Загрузка…</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: #0b1020;
+        --fg: #e8eefc;
+        --muted: rgba(232, 238, 252, 0.72);
+        --card: rgba(255, 255, 255, 0.06);
+        --stroke: rgba(255, 255, 255, 0.12);
+        --accent: #7c5cff;
+      }
+
+      @media (prefers-color-scheme: light) {
+        :root {
+          --bg: #f6f8ff;
+          --fg: #0b1020;
+          --muted: rgba(11, 16, 32, 0.65);
+          --card: rgba(0, 0, 0, 0.04);
+          --stroke: rgba(0, 0, 0, 0.1);
+          --accent: #5b3dff;
+        }
+      }
+
+      html,
+      body {
+        height: 100%;
+      }
+
+      body {
+        margin: 0;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
+          Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, "Apple Color Emoji",
+          "Segoe UI Emoji";
+        background: radial-gradient(
+            1200px 800px at 20% 0%,
+            rgba(124, 92, 255, 0.22),
+            transparent 55%
+          ),
+          radial-gradient(
+            900px 700px at 90% 30%,
+            rgba(0, 214, 255, 0.16),
+            transparent 55%
+          ),
+          var(--bg);
+        color: var(--fg);
+        display: grid;
+        place-items: center;
+        padding: 24px;
+      }
+
+      .card {
+        width: min(520px, 100%);
+        border-radius: 18px;
+        background: var(--card);
+        border: 1px solid var(--stroke);
+        backdrop-filter: blur(10px);
+        padding: 22px 20px;
+        box-shadow: 0 18px 50px rgba(0, 0, 0, 0.18);
+      }
+
+      .row {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .spinner {
+        width: 36px;
+        height: 36px;
+        border-radius: 999px;
+        border: 3px solid rgba(124, 92, 255, 0.22);
+        border-top-color: var(--accent);
+        animation: spin 900ms linear infinite;
+        flex: 0 0 auto;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      h1 {
+        font-size: 18px;
+        line-height: 1.25;
+        margin: 0;
+        letter-spacing: 0.2px;
+      }
+
+      p {
+        margin: 8px 0 0 0;
+        color: var(--muted);
+        font-size: 13.5px;
+        line-height: 1.55;
+      }
+
+      .bar {
+        height: 8px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid var(--stroke);
+        overflow: hidden;
+        margin-top: 16px;
+      }
+
+      .bar > span {
+        display: block;
+        height: 100%;
+        width: 42%;
+        background: linear-gradient(90deg, var(--accent), rgba(0, 214, 255, 0.8));
+        border-radius: 999px;
+        animation: move 1.2s ease-in-out infinite;
+      }
+
+      @keyframes move {
+        0% {
+          transform: translateX(-30%);
+          opacity: 0.6;
+        }
+        50% {
+          transform: translateX(95%);
+          opacity: 1;
+        }
+        100% {
+          transform: translateX(-30%);
+          opacity: 0.6;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="card" role="main" aria-label="Страница загрузки">
+      <div class="row">
+        <div class="spinner" aria-hidden="true"></div>
+        <div>
+          <h1>Загрузка…</h1>
+          <p>Сайт на GitHub Pages скоро будет доступен.</p>
+        </div>
+      </div>
+      <div class="bar" aria-hidden="true"><span></span></div>
+    </main>
+  </body>
+</html>
+
