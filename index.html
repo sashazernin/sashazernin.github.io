@@ -298,6 +298,32 @@
 
           <a
             class="project"
+            id="siero-download"
+            href="https://github.com/sashazernin/silero-tts/releases/latest"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span class="project-kicker" data-i18n="siero.tag">Desktop</span>
+            <h2 data-i18n="siero.title">Silero TTS</h2>
+            <p data-i18n="siero.desc">
+              Приложение для синтеза речи под Windows — скачайте последнюю сборку.
+            </p>
+            <span class="project-cta">
+              <span data-i18n="download">Скачать</span>
+              <svg viewBox="0 0 16 16" aria-hidden="true" fill="none">
+                <path
+                  d="M8 2.5v8M4.5 8 8 11.5 11.5 8M3 13.5h10"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </span>
+          </a>
+
+          <a
+            class="project"
             href="https://sashazernin.github.io/React-project-cats"
             target="_blank"
             rel="noopener noreferrer"
@@ -331,10 +357,15 @@
           heading: "Мои проекты",
           lead: "Небольшая доска с инструментами и сайтами, которые я делаю.",
           open: "Открыть",
+          download: "Скачать",
           "oni.tag": "Калькулятор",
           "oni.title": "Simple Oni Calculator",
           "oni.desc":
             "Компаньон для игры Oxygen Not Included: еда, ракеты, карта звёзд и колонии.",
+          "siero.tag": "Desktop",
+          "siero.title": "Silero TTS",
+          "siero.desc":
+            "Приложение для синтеза речи под Windows — скачайте последнюю сборку.",
           "cats.tag": "React",
           "cats.title": "React Project Cats",
           "cats.desc":
@@ -345,10 +376,15 @@
           heading: "My projects",
           lead: "A small board of tools and sites I build.",
           open: "Open",
+          download: "Download",
           "oni.tag": "Calculator",
           "oni.title": "Simple Oni Calculator",
           "oni.desc":
             "A companion for the game Oxygen Not Included: food, rockets, star map, and colonies.",
+          "siero.tag": "Desktop",
+          "siero.title": "Silero TTS",
+          "siero.desc":
+            "A Windows text-to-speech app — download the latest build.",
           "cats.tag": "React",
           "cats.title": "React Project Cats",
           "cats.desc":
@@ -382,6 +418,35 @@
       });
 
       setLang(detectLang());
+
+      async function resolveSieroLatestDownload() {
+        const link = document.getElementById("siero-download");
+        if (!link) return;
+
+        try {
+          const res = await fetch(
+            "https://api.github.com/repos/sashazernin/silero-tts/releases/latest"
+          );
+          if (!res.ok) return;
+
+          const release = await res.json();
+          const assets = Array.isArray(release.assets) ? release.assets : [];
+          const asset =
+            assets.find((a) => /win\.zip$/i.test(a.name)) ||
+            assets.find((a) => /\.zip$/i.test(a.name)) ||
+            assets[0];
+
+          if (asset?.browser_download_url) {
+            link.href = asset.browser_download_url;
+            link.removeAttribute("target");
+            link.setAttribute("download", "");
+          }
+        } catch {
+          // Keep fallback to /releases/latest
+        }
+      }
+
+      resolveSieroLatestDownload();
     </script>
   </body>
 </html>
