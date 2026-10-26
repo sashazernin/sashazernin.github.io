@@ -167,6 +167,13 @@
         outline: none;
       }
 
+      .project-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+      }
+
       .project-kicker {
         display: inline-flex;
         align-items: center;
@@ -185,6 +192,16 @@
         border-radius: 50%;
         background: currentColor;
         box-shadow: 0 0 0 4px rgba(196, 161, 255, 0.18);
+      }
+
+      .project-meta {
+        margin: 0;
+        flex: 0 0 auto;
+        font-size: 0.78rem;
+        font-weight: 500;
+        color: rgba(244, 239, 255, 0.5);
+        letter-spacing: 0.01em;
+        white-space: nowrap;
       }
 
       .project h2 {
@@ -277,7 +294,10 @@
             target="_blank"
             rel="noopener noreferrer"
           >
-            <span class="project-kicker" data-i18n="oni.tag">Калькулятор</span>
+            <div class="project-head">
+              <span class="project-kicker" data-i18n="oni.tag">Калькулятор</span>
+              <time class="project-meta" data-update="oni" hidden></time>
+            </div>
             <h2 data-i18n="oni.title">Simple Oni Calculator</h2>
             <p data-i18n="oni.desc">
               Компаньон для игры Oxygen Not Included: еда, ракеты, карта звёзд и колонии.
@@ -303,7 +323,10 @@
             target="_blank"
             rel="noopener noreferrer"
           >
-            <span class="project-kicker" data-i18n="siero.tag">Desktop</span>
+            <div class="project-head">
+              <span class="project-kicker" data-i18n="siero.tag">Desktop</span>
+              <time class="project-meta" data-update="silero" hidden></time>
+            </div>
             <h2 data-i18n="siero.title">Silero TTS</h2>
             <p data-i18n="siero.desc">
               Приложение для синтеза речи под Windows — скачайте последнюю сборку.
@@ -328,7 +351,10 @@
             target="_blank"
             rel="noopener noreferrer"
           >
-            <span class="project-kicker" data-i18n="cats.tag">React</span>
+            <div class="project-head">
+              <span class="project-kicker" data-i18n="cats.tag">React</span>
+              <time class="project-meta" data-update="cats" hidden></time>
+            </div>
             <h2 data-i18n="cats.title">React Project Cats</h2>
             <p data-i18n="cats.desc">
               React-приложение про котиков: просмотр и работа с карточками кошек.
@@ -393,6 +419,12 @@
       };
 
       const storageKey = "projects-lang";
+      let currentLang = "ru";
+      const updates = {
+        oni: null,
+        silero: null,
+        cats: null,
+      };
 
       function detectLang() {
         const saved = localStorage.getItem(storageKey);
@@ -400,7 +432,29 @@
         return navigator.language?.toLowerCase().startsWith("ru") ? "ru" : "en";
       }
 
+      function formatDate(iso, lang) {
+        const date = new Date(iso);
+        if (Number.isNaN(date.getTime())) return "";
+        return new Intl.DateTimeFormat(lang === "ru" ? "ru-RU" : "en-US", {
+          day: "numeric",
+          month: "short",
+          year: "numeric",
+        }).format(date);
+      }
+
+      function renderUpdates() {
+        document.querySelectorAll("[data-update]").forEach((el) => {
+          const key = el.getAttribute("data-update");
+          const info = updates[key];
+          if (!info?.date) return;
+          el.textContent = info.date;
+          if (info.iso) el.setAttribute("datetime", info.iso);
+          el.hidden = false;
+        });
+      }
+
       function setLang(lang) {
+        currentLang = lang;
         const dict = i18n[lang] || i18n.ru;
         document.documentElement.lang = lang;
         document.querySelectorAll("[data-i18n]").forEach((el) => {
@@ -411,6 +465,12 @@
           btn.setAttribute("aria-pressed", String(btn.dataset.lang === lang));
         });
         localStorage.setItem(storageKey, lang);
+        Object.keys(updates).forEach((key) => {
+          if (updates[key]?.iso) {
+            updates[key].date = formatDate(updates[key].iso, currentLang);
+          }
+        });
+        renderUpdates();
       }
 
       document.querySelectorAll(".lang button").forEach((btn) => {
@@ -419,7 +479,37 @@
 
       setLang(detectLang());
 
-      async function resolveSieroLatestDownload() {
+      async function fetchLatestCommit(repo) {
+        for (const ref of ["main", "master"]) {
+          const res = await fetch(
+            `https://api.github.com/repos/${repo}/commits?sha=${ref}&per_page=1`
+          );
+          if (!res.ok) continue;
+          const commits = await res.json();
+          const commit = Array.isArray(commits) ? commits[0] : null;
+          if (!commit) continue;
+          const iso =
+            commit.commit?.author?.date || commit.commit?.committer?.date;
+          return {
+            date: formatDate(iso, currentLang),
+            iso,
+          };
+        }
+        return null;
+      }
+
+      async function loadCommitUpdate(key, repo) {
+        try {
+          const info = await fetchLatestCommit(repo);
+          if (!info) return;
+          updates[key] = info;
+          renderUpdates();
+        } catch {
+          // Ignore network/API errors
+        }
+      }
+
+      async function resolveSileroLatest() {
         const link = document.getElementById("siero-download");
         if (!link) return;
 
@@ -430,6 +520,13 @@
           if (!res.ok) return;
 
           const release = await res.json();
+          const iso = release.published_at || release.created_at;
+          updates.silero = {
+            date: formatDate(iso, currentLang),
+            iso,
+          };
+          renderUpdates();
+
           const assets = Array.isArray(release.assets) ? release.assets : [];
           const asset =
             assets.find((a) => /win\.zip$/i.test(a.name)) ||
@@ -446,7 +543,9 @@
         }
       }
 
-      resolveSieroLatestDownload();
+      loadCommitUpdate("oni", "sashazernin/oni-calculator");
+      loadCommitUpdate("cats", "sashazernin/React-project-cats");
+      resolveSileroLatest();
     </script>
   </body>
 </html>
