@@ -44,6 +44,7 @@
 
       body {
         margin: 0;
+        position: relative;
         font-family: var(--font-body);
         color: var(--fg);
         background:
@@ -61,11 +62,8 @@
       }
 
       .topbar {
-        display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
-        gap: 1rem;
         margin-bottom: 2.75rem;
+        padding-right: 6.5rem;
         animation: rise 0.7s ease both;
       }
 
@@ -92,13 +90,16 @@
       }
 
       .lang {
+        position: absolute;
+        top: 1.25rem;
+        right: 1.25rem;
+        z-index: 10;
         display: inline-flex;
         border: 1px solid var(--line);
         border-radius: 999px;
         overflow: hidden;
-        background: rgba(255, 255, 255, 0.04);
+        background: rgba(18, 9, 31, 0.72);
         backdrop-filter: blur(8px);
-        flex: 0 0 auto;
       }
 
       .lang button {
@@ -260,18 +261,22 @@
         }
 
         .topbar {
-          flex-direction: column;
-          align-items: stretch;
           margin-bottom: 2rem;
+          padding-right: 5.5rem;
         }
 
         .lang {
-          align-self: flex-end;
+          top: 0.85rem;
+          right: 0.85rem;
         }
       }
     </style>
   </head>
   <body>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" data-lang="ru" aria-pressed="true">RU</button>
+      <button type="button" data-lang="en" aria-pressed="false">EN</button>
+    </div>
     <div class="page">
       <header class="topbar">
         <div class="brand">
@@ -279,10 +284,6 @@
           <p class="brand-lead" data-i18n="lead">
             Небольшая доска с инструментами и сайтами, которые я делаю.
           </p>
-        </div>
-        <div class="lang" role="group" aria-label="Language">
-          <button type="button" data-lang="ru" aria-pressed="true">RU</button>
-          <button type="button" data-lang="en" aria-pressed="false">EN</button>
         </div>
       </header>
 
