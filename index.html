@@ -296,7 +296,7 @@
             rel="noopener noreferrer"
           >
             <div class="project-head">
-              <span class="project-kicker" data-i18n="oni.tag">Калькулятор</span>
+              <span class="project-kicker" data-i18n="oni.tag">Web</span>
               <time class="project-meta" data-update="oni" hidden></time>
             </div>
             <h2 data-i18n="oni.title">Simple Oni Calculator</h2>
@@ -345,34 +345,6 @@
               </svg>
             </span>
           </a>
-
-          <a
-            class="project"
-            href="https://sashazernin.github.io/React-project-cats"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <div class="project-head">
-              <span class="project-kicker" data-i18n="cats.tag">React</span>
-              <time class="project-meta" data-update="cats" hidden></time>
-            </div>
-            <h2 data-i18n="cats.title">React Project Cats</h2>
-            <p data-i18n="cats.desc">
-              React-приложение про котиков: просмотр и работа с карточками кошек.
-            </p>
-            <span class="project-cta">
-              <span data-i18n="open">Открыть</span>
-              <svg viewBox="0 0 16 16" aria-hidden="true" fill="none">
-                <path
-                  d="M3 8h9M8 3.5 12.5 8 8 12.5"
-                  stroke="currentColor"
-                  stroke-width="1.8"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-            </span>
-          </a>
         </div>
       </section>
     </div>
@@ -385,7 +357,7 @@
           lead: "Небольшая доска с инструментами и сайтами, которые я делаю.",
           open: "Открыть",
           download: "Скачать",
-          "oni.tag": "Калькулятор",
+          "oni.tag": "Web",
           "oni.title": "Simple Oni Calculator",
           "oni.desc":
             "Компаньон для игры Oxygen Not Included: еда, ракеты, карта звёзд и колонии.",
@@ -393,10 +365,6 @@
           "siero.title": "Silero TTS",
           "siero.desc":
             "Приложение для синтеза речи под Windows — скачайте последнюю сборку.",
-          "cats.tag": "React",
-          "cats.title": "React Project Cats",
-          "cats.desc":
-            "React-приложение про котиков: просмотр и работа с карточками кошек.",
         },
         en: {
           title: "My projects",
@@ -404,7 +372,7 @@
           lead: "A small board of tools and sites I build.",
           open: "Open",
           download: "Download",
-          "oni.tag": "Calculator",
+          "oni.tag": "Web",
           "oni.title": "Simple Oni Calculator",
           "oni.desc":
             "A companion for the game Oxygen Not Included: food, rockets, star map, and colonies.",
@@ -412,10 +380,6 @@
           "siero.title": "Silero TTS",
           "siero.desc":
             "A Windows text-to-speech app — download the latest build.",
-          "cats.tag": "React",
-          "cats.title": "React Project Cats",
-          "cats.desc":
-            "A React app about cats: browse and work with cat cards.",
         },
       };
 
@@ -424,7 +388,6 @@
       const updates = {
         oni: null,
         silero: null,
-        cats: null,
       };
 
       function detectLang() {
@@ -545,7 +508,6 @@
       }
 
       loadCommitUpdate("oni", "sashazernin/oni-calculator");
-      loadCommitUpdate("cats", "sashazernin/React-project-cats");
       resolveSileroLatest();
     </script>
   </body>
